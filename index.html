@@ -18,7 +18,7 @@
       display: none;
     }
 
-    #intro, #quiz, #final-message {
+    #quiz, #final-message {
       padding: 40px;
       min-height: 100vh;
       display: flex;
@@ -69,13 +69,7 @@
   </style>
 </head>
 <body>
-  <div id="intro">
-    <h1>🎤 Welcome to <em>Era Birthday Quest</em>!</h1>
-    <p>Test your Taylor Swift knowledge through every era to unlock your special surprise!</p>
-    <button id="startButton">Start the Quest 💕</button>
-  </div>
-
-  <div id="quiz" class="hidden">
+  <div id="quiz">
     <h2 id="era-title"></h2>
     <div id="question-container"></div>
   </div>
@@ -91,121 +85,49 @@
       {
         title: 'Fearless Era ✨',
         questions: [
-          {
-            q: 'Which song from the Fearless album won a Grammy for Album of the Year?',
-            options: ['Love Story', 'White Horse', 'Fearless'],
-            answer: 'Fearless'
-          },
-          {
-            q: 'What color dress did Taylor wear on the Fearless album cover?',
-            options: ['Gold', 'Red', 'Silver'],
-            answer: 'Gold'
-          },
-          {
-            q: 'In “You Belong With Me”, who is she singing to?',
-            options: ['Her best friend’s boyfriend', 'Her ex', 'Her brother'],
-            answer: 'Her best friend’s boyfriend'
-          }
+          { q: 'Which song from the Fearless album won a Grammy for Album of the Year?', options: ['Love Story', 'White Horse', 'Fearless'], answer: 'Fearless' },
+          { q: 'What color dress did Taylor wear on the Fearless album cover?', options: ['Gold', 'Red', 'Silver'], answer: 'Gold' },
+          { q: 'In “You Belong With Me”, who is she singing to?', options: ['Her best friend’s boyfriend', 'Her ex', 'Her brother'], answer: 'Her best friend’s boyfriend' }
         ]
       },
       {
         title: 'Red Era ❤️',
         questions: [
-          {
-            q: 'Which famous scarf is mentioned in “All Too Well”?',
-            options: ['Red', 'Blue', 'Plaid'],
-            answer: 'Red'
-          },
-          {
-            q: 'What year was the original Red album released?',
-            options: ['2010', '2012', '2014'],
-            answer: '2012'
-          },
-          {
-            q: 'Which artist featured in “Everything Has Changed”?',
-            options: ['Ed Sheeran', 'Shawn Mendes', 'Harry Styles'],
-            answer: 'Ed Sheeran'
-          }
+          { q: 'Which famous scarf is mentioned in “All Too Well”?', options: ['Red', 'Blue', 'Plaid'], answer: 'Red' },
+          { q: 'What year was the original Red album released?', options: ['2010', '2012', '2014'], answer: '2012' },
+          { q: 'Which artist featured in “Everything Has Changed”?', options: ['Ed Sheeran', 'Shawn Mendes', 'Harry Styles'], answer: 'Ed Sheeran' }
         ]
       },
       {
         title: '1989 Era 💙',
         questions: [
-          {
-            q: 'Which song starts with “Nice to meet you, where you been?”',
-            options: ['Blank Space', 'Style', 'Shake It Off'],
-            answer: 'Blank Space'
-          },
-          {
-            q: '1989 is known for which major musical shift?',
-            options: ['Country to Pop', 'Pop to Rock', 'Rock to Folk'],
-            answer: 'Country to Pop'
-          },
-          {
-            q: 'Which animal appears in the “Blank Space” video?',
-            options: ['Cat', 'Tiger', 'Horse'],
-            answer: 'Horse'
-          }
+          { q: 'Which song starts with “Nice to meet you, where you been?”', options: ['Blank Space', 'Style', 'Shake It Off'], answer: 'Blank Space' },
+          { q: '1989 is known for which major musical shift?', options: ['Country to Pop', 'Pop to Rock', 'Rock to Folk'], answer: 'Country to Pop' },
+          { q: 'Which animal appears in the “Blank Space” video?', options: ['Cat', 'Tiger', 'Horse'], answer: 'Horse' }
         ]
       },
       {
         title: 'Reputation Era 🐍',
         questions: [
-          {
-            q: 'What symbol became iconic during the Reputation era?',
-            options: ['Snake', 'Butterfly', 'Rose'],
-            answer: 'Snake'
-          },
-          {
-            q: 'Finish the lyric: “I’m sorry, the old Taylor can’t come to the phone right now...”',
-            options: ['Why? Oh, she’s dead', 'Why? She’s busy', 'Why? She’s gone'],
-            answer: 'Why? Oh, she’s dead'
-          },
-          {
-            q: 'Who featured on “End Game”?',
-            options: ['Ed Sheeran & Future', 'Drake & Rihanna', 'Post Malone'],
-            answer: 'Ed Sheeran & Future'
-          }
+          { q: 'What symbol became iconic during the Reputation era?', options: ['Snake', 'Butterfly', 'Rose'], answer: 'Snake' },
+          { q: 'Finish the lyric: “I’m sorry, the old Taylor can’t come to the phone right now...”', options: ['Why? Oh, she’s dead', 'Why? She’s busy', 'Why? She’s gone'], answer: 'Why? Oh, she’s dead' },
+          { q: 'Who featured on “End Game”?', options: ['Ed Sheeran & Future', 'Drake & Rihanna', 'Post Malone'], answer: 'Ed Sheeran & Future' }
         ]
       },
       {
         title: 'Lover Era 💕',
         questions: [
-          {
-            q: 'Which song opens the Lover album?',
-            options: ['I Forgot That You Existed', 'Lover', 'The Archer'],
-            answer: 'I Forgot That You Existed'
-          },
-          {
-            q: 'What’s the color theme of the Lover era?',
-            options: ['Pink & Blue Pastels', 'Gold', 'Black & White'],
-            answer: 'Pink & Blue Pastels'
-          },
-          {
-            q: 'Who is featured in “ME!”?',
-            options: ['Brendon Urie', 'Ed Sheeran', 'Zayn Malik'],
-            answer: 'Brendon Urie'
-          }
+          { q: 'Which song opens the Lover album?', options: ['I Forgot That You Existed', 'Lover', 'The Archer'], answer: 'I Forgot That You Existed' },
+          { q: 'What’s the color theme of the Lover era?', options: ['Pink & Blue Pastels', 'Gold', 'Black & White'], answer: 'Pink & Blue Pastels' },
+          { q: 'Who is featured in “ME!”?', options: ['Brendon Urie', 'Ed Sheeran', 'Zayn Malik'], answer: 'Brendon Urie' }
         ]
       },
       {
         title: 'Midnights Era 🌌',
         questions: [
-          {
-            q: 'What song from Midnights references Karma?',
-            options: ['Anti-Hero', 'Lavender Haze', 'Karma'],
-            answer: 'Karma'
-          },
-          {
-            q: 'Finish the lyric: “It’s me, hi...”',
-            options: ['I’m the problem, it’s me', 'I’m the star, can’t you see', 'I’m your dream, it’s me'],
-            answer: 'I’m the problem, it’s me'
-          },
-          {
-            q: 'Which color is most associated with Midnights?',
-            options: ['Blue', 'Purple', 'Silver'],
-            answer: 'Blue'
-          }
+          { q: 'What song from Midnights references Karma?', options: ['Anti-Hero', 'Lavender Haze', 'Karma'], answer: 'Karma' },
+          { q: 'Finish the lyric: “It’s me, hi...”', options: ['I’m the problem, it’s me', 'I’m the star, can’t you see', 'I’m your dream, it’s me'], answer: 'I’m the problem, it’s me' },
+          { q: 'Which color is most associated with Midnights?', options: ['Blue', 'Purple', 'Silver'], answer: 'Blue' }
         ]
       }
     ];
@@ -213,18 +135,10 @@
     let currentEra = 0;
     let currentQuestion = 0;
 
-    const intro = document.getElementById('intro');
     const quiz = document.getElementById('quiz');
     const eraTitle = document.getElementById('era-title');
     const questionContainer = document.getElementById('question-container');
     const finalMessage = document.getElementById('final-message');
-    const startButton = document.getElementById('startButton');
-
-    startButton.addEventListener('click', () => {
-      intro.classList.add('hidden');
-      quiz.classList.remove('hidden');
-      showQuestion();
-    });
 
     function showQuestion() {
       const era = eras[currentEra];
@@ -271,6 +185,9 @@
       quiz.classList.add('hidden');
       finalMessage.classList.remove('hidden');
     }
+
+    // Start immediately
+    showQuestion();
   </script>
 </body>
 </html>
