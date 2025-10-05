@@ -5,54 +5,114 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Era Birthday Quest</title>
   <style>
-    :root{
-      --bg:#0f172a; --card:#0b1220; --text:#f8fafc;
-      --glass: rgba(255,255,255,0.04);
-      --accent:#ff758f;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    :root {
+      --bg: #0f172a; --text: #f8fafc; --accent: #ff758f;
     }
-    *{box-sizing:border-box}
-    body{margin:0; min-height:100vh; background:linear-gradient(180deg,#071020 0%, #0b1530 100%); color:var(--text); display:flex; align-items:center; justify-content:center; padding:32px}
-    .app{width:980px; max-width:96vw; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08)); border-radius:14px; padding:22px; box-shadow:0 8px 30px rgba(2,6,23,0.7);}
-    header{display:flex; align-items:center; gap:16px}
-    h1{margin:0; font-size:22px}
-    .subtitle{color:rgba(255,255,255,0.7); font-size:13px}
-
-    .era-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px}
-    .era-card{background:var(--glass); border-radius:12px; padding:14px; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease; border:1px solid rgba(255,255,255,0.03)}
-    .era-card:hover{transform:translateY(-6px); box-shadow:0 8px 24px rgba(0,0,0,0.5)}
-    .era-title{font-weight:700; font-size:16px}
-    .era-desc{font-size:13px; color:rgba(255,255,255,0.8)}
-
-    .play-area{margin-top:18px; display:flex; gap:16px}
-    .panel{flex:1; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:10px; min-height:320px}
-
-    .hud{display:flex; gap:10px; align-items:center; justify-content:space-between}
-    .progress{height:12px; background:rgba(255,255,255,0.06); border-radius:999px; overflow:hidden}
-    .progress > i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent), #ffd1e0)}
-
-    .items-area{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
-    .item{width:88px; height:88px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:32px; cursor:pointer; user-select:none; transition:transform .12s ease; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03)}
-    .item:hover{transform:translateY(-6px)}
-
-    .controls{display:flex; gap:8px; margin-top:12px}
-    button{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:8px; color:var(--text); cursor:pointer}
-    button.primary{background:linear-gradient(90deg,var(--accent), #ffd1e0); color:#1a1a1a; border:none}
-
-    .hidden{display:none}
-
-    /* final screen */
-    .final-screen{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center}
-    .big-heart{font-size:96px; animation:pop .9s ease forwards}
-    @keyframes pop{0%{transform:scale(.2); opacity:0}70%{transform:scale(1.12); opacity:1}100%{transform:scale(1);}}
-
-    .confetti-canvas{position:fixed; left:0; top:0; width:100%; height:100%; pointer-events:none}
-
-    footer{margin-top:14px; color:rgba(255,255,255,0.6); font-size:13px}
-
-    /* responsive */
-    @media (max-width:860px){.era-grid{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:560px){.era-grid{grid-template-columns:repeat(1,1fr)} .play-area{flex-direction:column}}
+    body {
+      margin: 0; min-height: 100vh;
+      background: linear-gradient(180deg, #071020 0%, #0b1530 100%);
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px; font-family: sans-serif;
+    }
+    .app {
+      width: 900px; max-width: 95vw;
+      background: rgba(255,255,255,0.05);
+      border-radius: 14px; padding: 24px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.7);
+    }
+    header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+    }
+    h1 { margin: 0; font-size: 24px; }
+    .subtitle { color: rgba(255,255,255,0.7); font-size: 14px; }
+    .era-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .era-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px; padding: 14px;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .era-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .era-title { font-weight: 700; font-size: 18px; }
+    .era-desc { font-size: 13px; color: rgba(255,255,255,0.8); }
+    .panel {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px; padding: 16px;
+      flex: 1;
+      min-height: 350px;
+    }
+    .play-area {
+      display: flex; gap: 16px; margin-top: 24px;
+    }
+    .question-area {
+      margin-top: 20px;
+    }
+    .question-title {
+      font-size: 18px; margin-bottom: 12px;
+    }
+    .choices {
+      list-style: none; padding: 0;
+    }
+    .choices li {
+      margin-bottom: 8px;
+    }
+    .choices button {
+      width: 100%; text-align: left;
+      padding: 10px; border: none;
+      border-radius: 8px; background: rgba(255,255,255,0.1);
+      color: var(--text); cursor: pointer;
+      transition: background .15s;
+    }
+    .choices button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    .choices button.correct { background: #4caf50; color: white; }
+    .choices button.wrong { background: #e53935; color: white; }
+    .controls { margin-top: 24px; }
+    button.primary {
+      background: linear-gradient(90deg, var(--accent), #ffd1e0);
+      color: #1a1a1a;
+      border: none; padding: 10px 16px; border-radius: 8px;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .final-screen {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+      text-align: center;
+    }
+    .big-heart {
+      font-size: 96px;
+      animation: pop .9s ease forwards;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.2); opacity: 0; }
+      70% { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .confetti-canvas {
+      position: fixed; top:0; left:0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    @media (max-width: 860px) {
+      .era-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) {
+      .era-grid { grid-template-columns: 1fr; }
+      .play-area { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
@@ -60,270 +120,397 @@
     <header>
       <div>
         <h1>Era Birthday Quest</h1>
-        <div class="subtitle">Click through the eras, collect items, and unlock your birthday surprise.</div>
+        <div class="subtitle">Answer the quiz in each era, then unlock your surprise.</div>
       </div>
-      <div style="margin-left:auto; text-align:right">
-        <div style="font-weight:700">For: <span id="recipientName">Her</span></div>
-        <div style="font-size:12px; color:rgba(255,255,255,0.7)">Completed: <span id="completedCount">0</span>/<span id="eraCount">0</span> eras</div>
+      <div style="text-align:right;">
+        <div><strong>For:</strong> <span id="recipientName">Her</span></div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.7)">
+          Completed Eras: <span id="completedCount">0</span>/<span id="eraCount">0</span>
+        </div>
       </div>
     </header>
 
     <div class="era-grid" id="eraGrid"></div>
 
     <div class="play-area">
-      <div class="panel" id="leftPanel">
-        <div class="hud">
-          <div>
-            <div style="font-weight:700" id="currentEraTitle">Select an era to begin</div>
-            <div style="font-size:13px; color:rgba(255,255,255,0.7)" id="currentEraDesc">Each era has a set of items to collect. Click them to progress.</div>
-          </div>
-          <div style="width:48%">
-            <div style="font-size:12px; color:rgba(255,255,255,0.7)">Progress</div>
-            <div class="progress"><i id="progBar"></i></div>
+      <div class="panel" id="quizPanel">
+        <div id="eraIntro">
+          <h2 id="currentEraTitle">Select an Era to Begin</h2>
+          <p id="currentEraDesc">Each era has 3 questions about Taylor Swift. Answer them all to complete the era.</p>
+        </div>
+        <div id="questionSection" class="hidden">
+          <div class="question-area">
+            <div class="question-title" id="questionText"></div>
+            <ul class="choices" id="choicesList"></ul>
           </div>
         </div>
-
-        <div class="items-area" id="itemsArea">
-          <div style="color:rgba(255,255,255,0.5); width:100%">Pick an era from above to start collecting.</div>
-        </div>
-
         <div class="controls">
-          <button id="resetBtn">Reset Era</button>
-          <button id="randomBtn">Surprise Era</button>
-          <button class="primary" id="giveUpBtn">Reveal Surprise</button>
+          <button id="nextQuestionBtn" class="primary hidden">Next Question</button>
+          <button id="revealBtn" class="primary">Reveal Surprise</button>
         </div>
       </div>
 
       <div class="panel" id="rightPanel">
         <div id="sideContent">
-          <h3 style="margin:8px 0 6px 0">Your Journey</h3>
-          <div id="collectedList" style="font-size:14px; color:rgba(255,255,255,0.9)">No items collected yet.</div>
+          <h3>Your Progress</h3>
+          <div id="statusList">No eras completed yet.</div>
         </div>
-
-        <div id="finalReveal" class="hidden" style="margin-top:20px">
+        <div id="finalReveal" class="hidden">
           <div class="final-screen">
             <div class="big-heart">💖</div>
-            <h2 id="finalMessageTitle">Happy Birthday!</h2>
-            <p id="finalMessageText" style="max-width:420px; color:rgba(255,255,255,0.9)"></p>
-            <button class="primary" id="restartBtn">Play Again</button>
+            <h2 id="finalTitle">Happy Birthday!</h2>
+            <p id="finalText"></p>
+            <button id="restartBtn" class="primary">Play Again</button>
           </div>
         </div>
       </div>
     </div>
-
-    <footer>Tip: customize the recipient name and final message inside <code>script</code> to personalize.</footer>
   </div>
 
   <canvas class="confetti-canvas" id="confetti"></canvas>
 
   <script>
-    /***************************
-     * CONFIG — edit these to customize
-     ***************************/
+    /*** CONFIG ***/
     const recipient = {
-      name: "Your Love",
+      name: "Your Love"
     };
+    const finalMessage = `Happy Birthday, my star ✨<br/>
+    I'm so proud of you — your voice, your laugh, your stage. Love you more than all the eras.`;
 
-    // The final message displayed in the reveal. Keep it short or use simple HTML.
-    const finalMessage = `Happy Birthday, my star ✨<br/>I'm so proud of you — your voice, your laugh, your stage. Love you more than all the eras.`;
-
-    // Era definitions: name, palette, emoji items
+    // Define eras and their quiz questions
     const ERAS = [
-      {id:'lover', title:'Lover', desc:'Pastel hearts and glitter', color:'#ff9fb1', items:['💖','🌈','🎀']},
-      {id:'fearless', title:'Fearless', desc:'Golden romance & sparkles', color:'#ffd27f', items:['✨','🎤','🌟']},
-      {id:'red', title:'Red', desc:'Scarves, passion & poetry', color:'#d33f49', items:['🧣','💌','🍷']},
-      {id:'nineteen', title:'1989', desc:'Retro synths & city lights', color:'#9bd3ff', items:['📸','🕶️','🎧']},
-      {id:'folklore', title:'Folklore', desc:'Cozy woods & stories', color:'#c7dcb6', items:['🍂','📜','🪵']},
-      {id:'midnights', title:'Midnights', desc:'Sparkly nights & secrets', color:'#7a6cff', items:['🌌','🕰️','🌙']}
+      {
+        id: 'lover',
+        title: 'Lover',
+        desc: 'Pastel hearts & glitter vibes',
+        questions: [
+          {
+            text: 'Which song on "Lover" contains the lyric “I’ve loved you three summers now, honey, I want ’em all”?',
+            choices: ['Cornelia Street', 'Lover', 'Paper Rings', 'Cruel Summer'],
+            correct: 0
+          },
+          {
+            text: 'Which song is NOT on the “Lover” album?',
+            choices: ['Daylight', 'Death by a Thousand Cuts', 'Getaway Car', 'London Boy'],
+            correct: 2
+          },
+          {
+            text: 'On “Lover”, Taylor refers to which city as “you were in New York, my love”?',
+            choices: ['Cornelia Street', 'London Boy', 'Miss Americana & the Heartbreak Prince', 'Soon You’ll Get Better'],
+            correct: 0
+          }
+        ]
+      },
+      {
+        id: 'fearless',
+        title: 'Fearless',
+        desc: 'Golden romance & youth',
+        questions: [
+          {
+            text: 'Which song is the title track of the “Fearless” album?',
+            choices: ['Fearless', 'Love Story', 'White Horse', 'Fifteen'],
+            correct: 0
+          },
+          {
+            text: '“You belong with me” was released on which Taylor Swift album?',
+            choices: ['Fearless', 'Speak Now', 'Red', '1989'],
+            correct: 0
+          },
+          {
+            text: 'Which song from “Fearless” won a Grammy for Best Female Country Vocal Performance?',
+            choices: ['White Horse', 'You Belong with Me', 'Mine', 'Fifteen'],
+            correct: 1
+          }
+        ]
+      },
+      {
+        id: 'red',
+        title: 'Red',
+        desc: 'Scarves, heartbreak & poetry',
+        questions: [
+          {
+            text: 'Which feature artist appears in “Everything Has Changed” on Red?',
+            choices: ['Ed Sheeran', 'Bon Iver', 'Kendrick Lamar', 'Brendon Urie'],
+            correct: 0
+          },
+          {
+            text: 'Which of these songs is *not* on Red?',
+            choices: ['Red', 'All Too Well', 'State of Grace', 'Style'],
+            correct: 3
+          },
+          {
+            text: '“We are too busy dancing to get knocked off our feet” is a lyric from which Red song?',
+            choices: ['Red', '22', 'Everything Has Changed', 'Stay Stay Stay'],
+            correct: 3
+          }
+        ]
+      },
+      {
+        id: 'nineteen',
+        title: '1989',
+        desc: 'Retro synth & city lights',
+        questions: [
+          {
+            text: 'Which of these songs is not on the original “1989” release?',
+            choices: ['Shake It Off', 'Blank Space', 'Wildest Dreams', 'Style', 'Lover'],
+            correct: 4
+          },
+          {
+            text: 'Which song’s music video features Taylor swinging on an ornament and riding a rollercoaster?',
+            choices: ['Out of the Woods', 'Welcome to New York', 'Style', 'Shake It Off'],
+            correct: 0
+          },
+          {
+            text: 'Which producer worked heavily with Taylor on 1989 (pop sound)?',
+            choices: ['Jack Antonoff', 'Max Martin', 'Nate Ruess', 'Kendrick Lamar'],
+            correct: 1
+          }
+        ]
+      },
+      {
+        id: 'folklore',
+        title: 'Folklore',
+        desc: 'Woodsy tales & soft melodies',
+        questions: [
+          {
+            text: 'Which song opens the folklore album?',
+            choices: ['the 1', 'cardigan', 'exile', 'august'],
+            correct: 0
+          },
+          {
+            text: 'Which two-track feature *Bon Iver* on folklore?',
+            choices: ['exile', 'peace', 'seven', 'betty'],
+            correct: 0
+          },
+          {
+            text: 'Which folklore song uses the line “I’ve been the archer, I’ve been the prey”?',
+            choices: ['the last great American dynasty', 'my tears ricochet', 'the archer', 'invisible string'],
+            correct: 2
+          }
+        ]
+      },
+      {
+        id: 'midnights',
+        title: 'Midnights',
+        desc: 'Sparkly nights & secret thoughts',
+        questions: [
+          {
+            text: 'Which song contains the lyric “I should’ve stayed, stayed, stayed” in Midnights?',
+            choices: ['Anti-Hero', 'Maroon', 'Snow on the Beach', 'Karma'],
+            correct: 0
+          },
+          {
+            text: 'Which track features Lana Del Rey on Midnights?',
+            choices: ['Bejeweled', 'Snow on the Beach', 'Lavender Haze', 'Vigilante Shit'],
+            correct: 1
+          },
+          {
+            text: 'Midnights is described as a concept album about how many sleepless nights?',
+            choices: ['5', '13', '20', '8'],
+            correct: 1
+          }
+        ]
+      }
     ];
 
-    /***************************
-     * END CONFIG
-     ***************************/
-
-    // small app state
+    /*** STATE ***/
     const state = {
       currentEra: null,
-      collected: {}, // eraId -> Set of items
+      currentQIndex: 0,
       completed: new Set()
     };
 
-    // DOM refs
+    /*** DOM REFS ***/
     const eraGrid = document.getElementById('eraGrid');
-    const itemsArea = document.getElementById('itemsArea');
-    const currentEraTitle = document.getElementById('currentEraTitle');
-    const currentEraDesc = document.getElementById('currentEraDesc');
-    const progBar = document.getElementById('progBar');
-    const collectedList = document.getElementById('collectedList');
-    const recipientName = document.getElementById('recipientName');
-    const completedCount = document.getElementById('completedCount');
-    const eraCount = document.getElementById('eraCount');
+    const completedCountEl = document.getElementById('completedCount');
+    const eraCountEl = document.getElementById('eraCount');
+    const recipientNameEl = document.getElementById('recipientName');
+    const statusListEl = document.getElementById('statusList');
+    const currentEraTitleEl = document.getElementById('currentEraTitle');
+    const currentEraDescEl = document.getElementById('currentEraDesc');
+    const questionSection = document.getElementById('questionSection');
+    const eraIntro = document.getElementById('eraIntro');
+    const questionTextEl = document.getElementById('questionText');
+    const choicesListEl = document.getElementById('choicesList');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const rightPanel = document.getElementById('rightPanel');
     const finalReveal = document.getElementById('finalReveal');
-    const finalMessageText = document.getElementById('finalMessageText');
-    const finalMessageTitle = document.getElementById('finalMessageTitle');
+    const finalTitle = document.getElementById('finalTitle');
+    const finalText = document.getElementById('finalText');
+    const restartBtn = document.getElementById('restartBtn');
+    const confettiCanvas = document.getElementById('confetti');
+    const ctx = confettiCanvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiLoopRunning = false;
 
-    recipientName.textContent = recipient.name;
-    eraCount.textContent = ERAS.length;
+    /*** INIT ***/
+    recipientNameEl.textContent = recipient.name;
+    eraCountEl.textContent = ERAS.length;
 
     // build era cards
-    ERAS.forEach((era)=>{
+    ERAS.forEach(e => {
       const card = document.createElement('div');
       card.className = 'era-card';
-      card.innerHTML = `<div class="era-title">${era.title}</div><div class="era-desc">${era.desc}</div>`;
-      card.style.borderLeft = `6px solid ${era.color}`;
-      card.addEventListener('click', ()=>selectEra(era.id));
+      card.innerHTML = `<div class="era-title">${e.title}</div><div class="era-desc">${e.desc}</div>`;
+      card.addEventListener('click', () => {
+        if (!state.completed.has(e.id)) selectEra(e.id);
+      });
       eraGrid.appendChild(card);
     });
 
-    function selectEra(id){
-      const era = ERAS.find(e=>e.id===id);
+    function selectEra(eraId) {
+      const era = ERAS.find(e => e.id === eraId);
       state.currentEra = era;
-      if(!state.collected[era.id]) state.collected[era.id] = new Set();
-      currentEraTitle.textContent = era.title;
-      currentEraDesc.textContent = era.desc;
-      renderItems(era);
-      updateHUD();
+      state.currentQIndex = 0;
+      eraIntro.classList.add('hidden');
+      questionSection.classList.remove('hidden');
+      nextQuestionBtn.classList.add('hidden');
+      revealBtn.classList.remove('hidden');
+      loadQuestion();
+      updateStatus();
     }
 
-    function renderItems(era){
-      itemsArea.innerHTML = '';
-      era.items.forEach((it)=>{
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.textContent = it;
-        if(state.collected[era.id] && state.collected[era.id].has(it)){
-          div.style.opacity = '0.4'; div.style.transform='scale(.96)';
-        }
-        div.addEventListener('click', ()=>collectItem(era, it, div));
-        itemsArea.appendChild(div);
+    function loadQuestion() {
+      const era = state.currentEra;
+      const qobj = era.questions[state.currentQIndex];
+      questionTextEl.textContent = qobj.text;
+      choicesListEl.innerHTML = '';
+      qobj.choices.forEach((c, idx) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.textContent = c;
+        btn.addEventListener('click', () => handleChoice(idx, btn));
+        li.appendChild(btn);
+        choicesListEl.appendChild(li);
       });
     }
 
-    function collectItem(era, item, el){
-      if(!state.collected[era.id]) state.collected[era.id] = new Set();
-      if(state.collected[era.id].has(item)) return; // already
-      state.collected[era.id].add(item);
-      // little pop animation
-      el.animate([{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:220, easing:'ease-out'});
-      el.style.opacity = '0.4'; el.style.transform='scale(.96)';
-      updateHUD();
-
-      // if collected all items for era, mark completed
-      if(state.collected[era.id].size === era.items.length){
-        state.completed.add(era.id);
-        completedCount.textContent = state.completed.size;
-        // little confetti burst
-        confettiBurst(12, era.color || getComputedStyle(document.documentElement).getPropertyValue('--accent'));
-      }
-
-      // auto-reveal if all eras finished
-      if(state.completed.size === ERAS.length){
-        showFinalReveal();
-      }
-    }
-
-    function updateHUD(){
+    function handleChoice(choiceIdx, btn) {
       const era = state.currentEra;
-      if(!era){ progBar.style.width = '0%'; collectedList.innerHTML = 'No items collected yet.'; return; }
-      const have = state.collected[era.id] ? state.collected[era.id].size : 0;
-      const total = era.items.length;
-      const pct = Math.round((have/total)*100);
-      progBar.style.width = pct + '%';
-
-      // collected list
-      const pairs = Object.entries(state.collected).filter(([k,s])=>s.size>0);
-      if(pairs.length===0) collectedList.innerHTML = 'No items collected yet.';
-      else{
-        collectedList.innerHTML = pairs.map(([k,s])=>{
-          const eraName = ERAS.find(e=>e.id===k).title;
-          return `<div style=\"margin-bottom:6px\"><strong>${eraName}</strong>: ${Array.from(s).join(' ')}</div>`;
-        }).join('');
+      const qobj = era.questions[state.currentQIndex];
+      if (choiceIdx === qobj.correct) {
+        btn.classList.add('correct');
+        // show Next if more questions
+        if (state.currentQIndex < era.questions.length - 1) {
+          nextQuestionBtn.classList.remove('hidden');
+          revealBtn.classList.add('hidden');
+        } else {
+          // last question correct => mark era complete
+          state.completed.add(era.id);
+          completedCountEl.textContent = state.completed.size;
+          revealBtn.textContent = 'Continue →';
+        }
+      } else {
+        btn.classList.add('wrong');
       }
+      // disable all choice buttons to prevent multiple tries on same question
+      Array.from(choicesListEl.querySelectorAll('button')).forEach(b => b.disabled = true);
     }
 
-    // controls
-    document.getElementById('resetBtn').addEventListener('click', ()=>{
-      if(!state.currentEra) return; state.collected[state.currentEra.id] = new Set(); state.completed.delete(state.currentEra.id); updateHUD(); renderItems(state.currentEra);
-    });
-    document.getElementById('randomBtn').addEventListener('click', ()=>{
-      const choice = ERAS[Math.floor(Math.random()*ERAS.length)]; selectEra(choice.id);
-    });
-    document.getElementById('giveUpBtn').addEventListener('click', ()=>{
-      showFinalReveal();
-    });
-    document.getElementById('restartBtn').addEventListener('click', ()=>{
-      // clear state
-      state.currentEra = null; state.collected = {}; state.completed = new Set(); finalReveal.classList.add('hidden'); document.getElementById('rightPanel').querySelector('#sideContent').classList.remove('hidden'); currentEraTitle.textContent='Select an era to begin'; currentEraDesc.textContent='Each era has a set of items to collect. Click them to progress.'; itemsArea.innerHTML = '<div style="color:rgba(255,255,255,0.5); width:100%">Pick an era from above to start collecting.</div>'; progBar.style.width='0%'; completedCount.textContent = '0';
+    nextQuestionBtn.addEventListener('click', () => {
+      state.currentQIndex++;
+      nextQuestionBtn.classList.add('hidden');
+      revealBtn.classList.remove('hidden');
+      loadQuestion();
     });
 
-    function showFinalReveal(){
-      // put final message
-      finalMessageText.innerHTML = finalMessage;
-      finalMessageTitle.textContent = `Happy Birthday, ${recipient.name}!`;
-      // hide side content
-      document.getElementById('rightPanel').querySelector('#sideContent').classList.add('hidden');
+    revealBtn.addEventListener('click', () => {
+      // if era completed and more eras left: return to intro for selecting next
+      if (state.completed.has(state.currentEra.id)) {
+        resetEraView();
+        if (state.completed.size === ERAS.length) {
+          showFinal();
+        }
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      state.currentEra = null;
+      state.currentQIndex = 0;
+      state.completed.clear();
+      finalReveal.classList.add('hidden');
+      rightPanel.querySelector('#sideContent').classList.remove('hidden');
+      eraIntro.classList.remove('hidden');
+      questionSection.classList.add('hidden');
+      revealBtn.textContent = 'Reveal Surprise';
+      updateStatus();
+      currentEraTitleEl.textContent = 'Select an Era to Begin';
+      currentEraDescEl.textContent = 'Each era has 3 questions about Taylor Swift. Answer them all to complete the era.';
+    });
+
+    function resetEraView() {
+      eraIntro.classList.remove('hidden');
+      questionSection.classList.add('hidden');
+      nextQuestionBtn.classList.add('hidden');
+      revealBtn.classList.remove('hidden');
+      // clear question UI
+      questionTextEl.textContent = '';
+      choicesListEl.innerHTML = '';
+    }
+
+    function updateStatus() {
+      const statuses = ERAS.map(e => {
+        return `${e.title}: ${state.completed.has(e.id) ? '✅' : '❌'}`;
+      });
+      statusListEl.innerHTML = statuses.join('<br/>');
+    }
+
+    function showFinal() {
+      rightPanel.querySelector('#sideContent').classList.add('hidden');
       finalReveal.classList.remove('hidden');
-      // big confetti
-      confettiBurst(160);
+      finalTitle.textContent = `Happy Birthday, ${recipient.name}!`;
+      finalText.innerHTML = finalMessage;
+      confettiBurst(120);
     }
 
-    /***********************
-     * Confetti (lightweight)
-     ***********************/
-    const confettiCanvas = document.getElementById('confetti');
-    confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight;
-    const ctx = confettiCanvas.getContext('2d');
-    let confettiParticles = [];
-
-    function confettiBurst(amount=60, colorHint){
+    /*** CONFETTI ***/
+    function confettiBurst(amount = 80) {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
       const colors = ['#ff7aa2','#ffd2e0','#ffe29f','#b9e3ff','#c7dcb6','#9bd3ff'];
-      for(let i=0;i<amount;i++){
+      for (let i = 0; i < amount; i++) {
         confettiParticles.push({
           x: Math.random()*confettiCanvas.width,
-          y: Math.random()*confettiCanvas.height*0.2,
-          vx: (Math.random()-0.5)*6,
-          vy: Math.random()*6+2,
+          y: -20,
+          vx: (Math.random()-0.5)*8,
+          vy: Math.random()*5+2,
           size: Math.random()*6+4,
-          color: colorHint || colors[Math.floor(Math.random()*colors.length)],
-          rot: Math.random()*360,
+          color: colors[Math.floor(Math.random()*colors.length)],
           life: 80 + Math.random()*40
         });
       }
-      if(!confettiLoopRunning) runConfettiLoop();
+      if (!confettiLoopRunning) runConfetti();
     }
-
-    let confettiLoopRunning = false;
-    function runConfettiLoop(){
+    function runConfetti() {
       confettiLoopRunning = true;
-      const loop = ()=>{
+      function loop() {
         ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
-        confettiParticles.forEach((p)=>{
-          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
-          ctx.fillStyle = p.color; ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
-          ctx.restore();
-          p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.rot += 6; p.life--; 
+        confettiParticles.forEach((p) => {
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size*0.6);
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.15;
+          p.life--;
         });
-        confettiParticles = confettiParticles.filter(p=>p.life>0 && p.y < confettiCanvas.height+50);
-        if(confettiParticles.length>0) requestAnimationFrame(loop); else confettiLoopRunning=false;
-      };
+        confettiParticles = confettiParticles.filter(p => p.life > 0);
+        if (confettiParticles.length > 0) {
+          requestAnimationFrame(loop);
+        } else {
+          confettiLoopRunning = false;
+        }
+      }
       requestAnimationFrame(loop);
     }
 
-    // convenience: resize confetti canvas
-    window.addEventListener('resize', ()=>{ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; });
+    window.addEventListener('resize', () => {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    });
 
-    // initial random era to seed UI
-    selectEra(ERAS[0].id);
-    updateHUD();
-
-    // ---------------------
-    // For you: how to customize
-    // ---------------------
-    // - Change recipient.name above
-    // - Edit 'finalMessage' to whatever you want (supports <br/>)
-    // - Add/remove ERAS items or change colors to match specific album art
-    // - Replace emoji items with small images by changing the .item element innerHTML
-    // - To host: save this file as index.html and open in browser, or drop into any static host (GitHub Pages, Netlify)
+    // on load: nothing selected yet
+    updateStatus();
   </script>
 </body>
 </html>
