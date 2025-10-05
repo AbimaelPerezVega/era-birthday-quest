@@ -136,7 +136,7 @@
     <header>
       <div>
         <h1>Era Birthday Quest</h1>
-        <div class="subtitle">Answer the quiz in each era, then unlock your surprise.</div>
+        <div class="subtitle">Answer the quiz in each era to unlock your surprise.</div>
       </div>
       <div style="text-align: right;">
         <div><strong>For:</strong> <span id="recipientName">Her</span></div>
@@ -148,15 +148,13 @@
 
     <div class="play-area">
       <div class="panel" id="quizPanel">
-        <div id="questionSection">
-          <div class="question-area">
-            <div class="question-title" id="questionText"></div>
-            <ul class="choices" id="choicesList"></ul>
-          </div>
+        <div class="question-area">
+          <div class="question-title" id="questionText"></div>
+          <ul class="choices" id="choicesList"></ul>
         </div>
         <div class="controls">
           <button id="nextQuestionBtn" class="primary hidden">Next Question</button>
-          <button id="revealBtn" class="primary">Reveal Surprise</button>
+          <button id="revealBtn" class="primary hidden">Reveal Surprise</button>
         </div>
       </div>
 
@@ -176,6 +174,8 @@
 
   <script>
     const recipient = { name: "Your Love" };
+    document.getElementById('recipientName').textContent = recipient.name;
+
     const finalMessage = `Happy Birthday, my star ✨<br/>I'm so proud of you — your voice, your laugh, your stage. Love you more than all the eras.`;
 
     const ERAS = [
@@ -197,15 +197,18 @@
           { text: '“We are too busy dancing to get knocked off our feet” is a lyric from which Red song?', choices: ['Red','22','Everything Has Changed','Stay Stay Stay'], correct: 3 }
         ]
       }
-      // Add more eras here if desired
+      // Add more eras here
     ];
-
-    // Example logic to display first question
-    const questionText = document.getElementById('questionText');
-    const choicesList = document.getElementById('choicesList');
 
     let currentEra = ERAS[0];
     let currentQuestion = 0;
+
+    const questionText = document.getElementById('questionText');
+    const choicesList = document.getElementById('choicesList');
+    const nextBtn = document.getElementById('nextQuestionBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const finalReveal = document.getElementById('finalReveal');
+    const finalText = document.getElementById('finalText');
 
     function showQuestion() {
       const q = currentEra.questions[currentQuestion];
@@ -215,8 +218,15 @@
         const btn = document.createElement('button');
         btn.innerText = choice;
         btn.onclick = () => {
+          btn.disabled = true;
           if(index === q.correct) btn.classList.add('correct');
           else btn.classList.add('wrong');
+          // Show next button if not last question
+          if(currentQuestion < currentEra.questions.length -1){
+            nextBtn.classList.remove('hidden');
+          } else {
+            revealBtn.classList.remove('hidden');
+          }
         };
         const li = document.createElement('li');
         li.appendChild(btn);
@@ -224,7 +234,18 @@
       });
     }
 
-    showQuestion();
+    nextBtn.onclick = () => {
+      currentQuestion++;
+      nextBtn.classList.add('hidden');
+      showQuestion();
+    };
+
+    revealBtn.onclick = () => {
+      finalReveal.classList.remove('hidden');
+      finalText.innerHTML = finalMessage;
+    };
+
+    showQuestion(); // Show the first question immediately
   </script>
 </body>
 </html>
