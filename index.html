@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Era Birthday Quest</title>
+  <title>Taylor Swift Era Quiz</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #ffafbd, #ffc3a0);
-      color: #333;
+      background: #0f172a;
+      color: #f1f5f9;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -19,21 +19,20 @@
     }
 
     #game-container {
-      background: white;
+      background: #1e293b;
       padding: 30px;
       border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       width: 90%;
       max-width: 600px;
     }
 
     h1 {
-      font-size: 2em;
-      color: #e91e63;
+      color: #f472b6;
     }
 
-    button {
-      background-color: #e91e63;
+    .era-btn {
+      background-color: #3b82f6;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -44,30 +43,52 @@
       transition: 0.3s;
     }
 
-    button:hover {
-      background-color: #c2185b;
+    .era-btn:hover {
+      background-color: #2563eb;
     }
 
-    #question-container {
-      margin-top: 20px;
+    .option-btn {
+      background-color: #334155;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 80%;
+      transition: 0.3s;
     }
 
-    .hidden {
+    .option-btn:hover {
+      background-color: #475569;
+    }
+
+    button.hidden {
       display: none;
     }
 
     #retry-btn {
-      background-color: #ff9800;
+      background-color: #facc15;
+      color: #000;
     }
 
     #retry-btn:hover {
-      background-color: #fb8c00;
+      background-color: #eab308;
+    }
+
+    #next-btn {
+      background-color: #22c55e;
+    }
+
+    #next-btn:hover {
+      background-color: #16a34a;
     }
   </style>
 </head>
 <body>
   <div id="game-container">
-    <h1>Era Birthday Quest</h1>
+    <h1>Taylor Swift Era Quiz</h1>
+    <div id="era-selection"></div>
     <div id="question-container"></div>
     <div id="feedback"></div>
     <button id="next-btn" class="hidden">Next Question</button>
@@ -75,51 +96,87 @@
   </div>
 
   <script>
-    const questions = [
-      {
-        question: "What year did we first meet?",
-        options: ["2019", "2020", "2021", "2022"],
-        answer: "2021"
-      },
-      {
-        question: "Where did we go on our first date?",
-        options: ["The beach", "A cafe", "The movies", "A park"],
-        answer: "The movies"
-      },
-      {
-        question: "What's my favorite color?",
-        options: ["Blue", "Red", "Pink", "Black"],
-        answer: "Blue"
-      }
-    ];
+    const eras = {
+      'Lover': [
+        { question: 'Which song is NOT on the "Lover" album?', options: ['Daylight', 'Death by a Thousand Cuts', 'Getaway Car', 'London Boy'], answer: 'Getaway Car' },
+        { question: 'What color palette is associated with the Lover era?', options: ['Pastel pinks and blues', 'Red and gold', 'Black and white', 'Purple and silver'], answer: 'Pastel pinks and blues' },
+        { question: 'Which single was the first released from Lover?', options: ['Lover', 'ME!', 'You Need to Calm Down', 'The Archer'], answer: 'ME!' }
+      ],
+      '1989': [
+        { question: 'What city inspired most of 1989?', options: ['Nashville', 'Los Angeles', 'New York City', 'London'], answer: 'New York City' },
+        { question: 'Which song won the Grammy for Record of the Year from 1989?', options: ['Blank Space', 'Style', 'Shake It Off', 'Bad Blood'], answer: 'Shake It Off' },
+        { question: '1989 was Taylor’s shift into what music genre?', options: ['Country', 'Pop', 'Rock', 'Folk'], answer: 'Pop' }
+      ],
+      'Red': [
+        { question: 'Which song contains the lyric “Loving him is like driving a new Maserati down a dead-end street”?', options: ['Treacherous', 'Red', 'State of Grace', 'I Knew You Were Trouble'], answer: 'Red' },
+        { question: 'What year was the original Red album released?', options: ['2010', '2012', '2014', '2016'], answer: '2012' },
+        { question: 'What’s the length of “All Too Well (10 Minute Version)”?', options: ['8:45', '9:12', '10:13', '10:00'], answer: '10:13' }
+      ],
+      'Folklore': [
+        { question: 'What is the sister album to Folklore?', options: ['Reputation', 'Evermore', 'Lover', 'Midnights'], answer: 'Evermore' },
+        { question: 'Which Folklore song features Bon Iver?', options: ['Exile', 'Cardigan', 'August', 'The 1'], answer: 'Exile' },
+        { question: 'Where was Folklore mostly written during?', options: ['Taylor’s 1989 tour', 'The pandemic', 'Her Red tour', 'Her debut era'], answer: 'The pandemic' }
+      ],
+      'Midnights': [
+        { question: 'Which song opens the Midnights album?', options: ['Lavender Haze', 'Maroon', 'Karma', 'Anti-Hero'], answer: 'Lavender Haze' },
+        { question: 'Which song includes the lyric “It’s me, hi, I’m the problem, it’s me”?', options: ['Bejeweled', 'Anti-Hero', 'Snow on the Beach', 'Mastermind'], answer: 'Anti-Hero' },
+        { question: 'What deluxe edition of Midnights was later released?', options: ['3AM Edition', 'Moonlight Edition', 'Taylor’s Version', 'Deluxe Lover Edition'], answer: '3AM Edition' }
+      ]
+    };
 
+    let currentEra = null;
+    let currentQuestions = [];
     let currentQuestionIndex = 0;
 
+    const eraSelection = document.getElementById('era-selection');
     const questionContainer = document.getElementById('question-container');
     const feedback = document.getElementById('feedback');
     const nextBtn = document.getElementById('next-btn');
     const retryBtn = document.getElementById('retry-btn');
 
+    function showEraSelection() {
+      questionContainer.innerHTML = '';
+      feedback.textContent = '';
+      nextBtn.classList.add('hidden');
+      retryBtn.classList.add('hidden');
+      eraSelection.innerHTML = '<h2>Select an Era</h2>';
+      for (const era in eras) {
+        const btn = document.createElement('button');
+        btn.textContent = era;
+        btn.classList.add('era-btn');
+        btn.addEventListener('click', () => startEra(era));
+        eraSelection.appendChild(btn);
+      }
+    }
+
+    function startEra(era) {
+      currentEra = era;
+      currentQuestions = eras[era];
+      currentQuestionIndex = 0;
+      eraSelection.innerHTML = '';
+      showQuestion();
+    }
+
     function showQuestion() {
       feedback.textContent = '';
       retryBtn.classList.add('hidden');
       nextBtn.classList.add('hidden');
-      const question = questions[currentQuestionIndex];
-      questionContainer.innerHTML = `
-        <h2>${question.question}</h2>
-        ${question.options.map(option => `<button class='option-btn'>${option}</button>`).join('')}
-      `;
-
-      document.querySelectorAll('.option-btn').forEach(button => {
-        button.addEventListener('click', () => selectAnswer(button.textContent));
+      const q = currentQuestions[currentQuestionIndex];
+      questionContainer.innerHTML = `<h2>${currentEra}: ${q.question}</h2>`;
+      q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option;
+        btn.classList.add('option-btn');
+        btn.addEventListener('click', () => selectAnswer(option));
+        questionContainer.appendChild(btn);
       });
     }
 
     function selectAnswer(selected) {
-      const correct = questions[currentQuestionIndex].answer;
+      const correct = currentQuestions[currentQuestionIndex].answer;
       if (selected === correct) {
         feedback.textContent = '✅ Correct!';
-        feedback.style.color = 'green';
+        feedback.style.color = 'lightgreen';
         nextBtn.classList.remove('hidden');
         retryBtn.classList.add('hidden');
       } else {
@@ -132,21 +189,49 @@
 
     nextBtn.addEventListener('click', () => {
       currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) {
+      if (currentQuestionIndex < currentQuestions.length) {
         showQuestion();
       } else {
-        questionContainer.innerHTML = '<h2>🎉 You completed the quest!</h2>';
-        feedback.textContent = 'Happy Birthday! ❤️';
-        nextBtn.classList.add('hidden');
-        retryBtn.classList.add('hidden');
+        const erasLeft = Object.keys(eras);
+        const currentEraIndex = erasLeft.indexOf(currentEra);
+        if (currentEraIndex < erasLeft.length - 1) {
+          startEra(erasLeft[currentEraIndex + 1]);
+        } else {
+          showFinalMessage();
+        }
       }
     });
 
-    retryBtn.addEventListener('click', () => {
-      showQuestion(); // reload the same question
-    });
+    retryBtn.addEventListener('click', showQuestion);
 
-    showQuestion();
+    function showFinalMessage() {
+      questionContainer.innerHTML = '<h2>🎉 Happy Birthday! 🎂</h2><p>You completed all the eras!</p>';
+      feedback.textContent = '';
+      nextBtn.classList.add('hidden');
+      retryBtn.classList.add('hidden');
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      const emojis = ['🎉','💖','💘','💝','🎂','💞'];
+      for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        confetti.style.position = 'fixed';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-10px';
+        confetti.style.fontSize = Math.random() * 20 + 15 + 'px';
+        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }`;
+    document.head.appendChild(style);
+
+    showEraSelection();
   </script>
 </body>
 </html>
