@@ -1,237 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taylor Swift Era Quiz</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #0f172a;
-      color: #f1f5f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-    }
-
-    #game-container {
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      width: 90%;
-      max-width: 600px;
-    }
-
-    h1 {
-      color: #f472b6;
-    }
-
-    .era-btn {
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .era-btn:hover {
-      background-color: #2563eb;
-    }
-
-    .option-btn {
-      background-color: #334155;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 80%;
-      transition: 0.3s;
-    }
-
-    .option-btn:hover {
-      background-color: #475569;
-    }
-
-    button.hidden {
-      display: none;
-    }
-
-    #retry-btn {
-      background-color: #facc15;
-      color: #000;
-    }
-
-    #retry-btn:hover {
-      background-color: #eab308;
-    }
-
-    #next-btn {
-      background-color: #22c55e;
-    }
-
-    #next-btn:hover {
-      background-color: #16a34a;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Taylor Swift Era Quest</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #fef6f9;
+    transition: background-color 0.5s ease;
+  }
+  #game-container {
+    text-align: center;
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 500px;
+  }
+  .era-btn {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: #eee;
+    transition: all 0.3s ease;
+  }
+  .era-btn:hover {
+    background-color: #ddd;
+  }
+  .completed {
+    background-color: #b2fab4 !important;
+    box-shadow: 0 0 10px #4caf50;
+  }
+  .question {
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .choice {
+    display: block;
+    margin: 0.4rem 0;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  .choice:hover {
+    background-color: #f0f0f0;
+  }
+  #feedback {
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+  #retry-btn {
+    margin-top: 1rem;
+    display: none;
+    padding: 0.6rem 1rem;
+    background-color: #ff91c8;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  #gift-btn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    animation: float 2s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  #final-message {
+    display: none;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
-  <div id="game-container">
-    <h1>Taylor Swift Era Quiz</h1>
-    <div id="era-selection"></div>
-    <div id="question-container"></div>
-    <div id="feedback"></div>
-    <button id="next-btn" class="hidden">Next Question</button>
-    <button id="retry-btn" class="hidden">Try Again</button>
-  </div>
+<div id="game-container"></div>
+<div id="gift-btn">🎁</div>
+<canvas id="confetti"></canvas>
+<script>
+const eras = {
+  Lover: {
+    color: '#ffd6e8',
+    questions: [
+      {q: "Which song opens the Lover album?", a: ["I Forgot That You Existed", "Lover", "The Archer", "Me!"], c: 0},
+      {q: "Who features on 'ME!'?", a: ["Brendon Urie", "Ed Sheeran", "Shawn Mendes", "Selena Gomez"], c: 0},
+      {q: "What year was Lover released?", a: ["2017", "2018", "2019", "2020"], c: 2}
+    ]
+  },
+  '1989': {
+    color: '#d6e8ff',
+    questions: [
+      {q: "Which song won the Grammy for Album of the Year in 1989?", a: ["Shake It Off", "Blank Space", "1989", "Bad Blood"], c: 2},
+      {q: "Where was Taylor born?", a: ["Reading, Pennsylvania", "Nashville, Tennessee", "Los Angeles", "New York City"], c: 0},
+      {q: "Which single includes the line 'Got a long list of ex-lovers'?", a: ["Blank Space", "Style", "Wildest Dreams", "Out of the Woods"], c: 0}
+    ]
+  },
+  Red: {
+    color: '#ffd6d6',
+    questions: [
+      {q: "What song features the lyric 'Loving him was red'?", a: ["22", "Red", "Begin Again", "Treacherous"], c: 1},
+      {q: "Who is featured in 'Everything Has Changed'?", a: ["Shawn Mendes", "Ed Sheeran", "John Mayer", "Harry Styles"], c: 1},
+      {q: "What year was the original Red album released?", a: ["2011", "2012", "2013", "2014"], c: 1}
+    ]
+  },
+  Folklore: {
+    color: '#f5efe6',
+    questions: [
+      {q: "Which song references 'Cardigan'?", a: ["August", "Betty", "Cardigan", "The 1"], c: 2},
+      {q: "What year was Folklore released?", a: ["2019", "2020", "2021", "2022"], c: 1},
+      {q: "Who collaborated with Taylor on 'Exile'?", a: ["Bon Iver", "Ed Sheeran", "Haim", "Aaron Dessner"], c: 0}
+    ]
+  },
+  Midnights: {
+    color: '#d6d6ff',
+    questions: [
+      {q: "What track opens the Midnights album?", a: ["Anti-Hero", "Lavender Haze", "Midnight Rain", "Maroon"], c: 1},
+      {q: "Which song includes the line 'It's me, hi, I'm the problem, it's me'?", a: ["Bejeweled", "Maroon", "Anti-Hero", "Karma"], c: 2},
+      {q: "Who did Taylor collaborate with on 'Snow On The Beach'?", a: ["Billie Eilish", "Lana Del Rey", "Phoebe Bridgers", "Halsey"], c: 1}
+    ]
+  }
+};
 
-  <script>
-    const eras = {
-      'Lover': [
-        { question: 'Which song is NOT on the "Lover" album?', options: ['Daylight', 'Death by a Thousand Cuts', 'Getaway Car', 'London Boy'], answer: 'Getaway Car' },
-        { question: 'What color palette is associated with the Lover era?', options: ['Pastel pinks and blues', 'Red and gold', 'Black and white', 'Purple and silver'], answer: 'Pastel pinks and blues' },
-        { question: 'Which single was the first released from Lover?', options: ['Lover', 'ME!', 'You Need to Calm Down', 'The Archer'], answer: 'ME!' }
-      ],
-      '1989': [
-        { question: 'What city inspired most of 1989?', options: ['Nashville', 'Los Angeles', 'New York City', 'London'], answer: 'New York City' },
-        { question: 'Which song won the Grammy for Record of the Year from 1989?', options: ['Blank Space', 'Style', 'Shake It Off', 'Bad Blood'], answer: 'Shake It Off' },
-        { question: '1989 was Taylor’s shift into what music genre?', options: ['Country', 'Pop', 'Rock', 'Folk'], answer: 'Pop' }
-      ],
-      'Red': [
-        { question: 'Which song contains the lyric “Loving him is like driving a new Maserati down a dead-end street”?', options: ['Treacherous', 'Red', 'State of Grace', 'I Knew You Were Trouble'], answer: 'Red' },
-        { question: 'What year was the original Red album released?', options: ['2010', '2012', '2014', '2016'], answer: '2012' },
-        { question: 'What’s the length of “All Too Well (10 Minute Version)”?', options: ['8:45', '9:12', '10:13', '10:00'], answer: '10:13' }
-      ],
-      'Folklore': [
-        { question: 'What is the sister album to Folklore?', options: ['Reputation', 'Evermore', 'Lover', 'Midnights'], answer: 'Evermore' },
-        { question: 'Which Folklore song features Bon Iver?', options: ['Exile', 'Cardigan', 'August', 'The 1'], answer: 'Exile' },
-        { question: 'Where was Folklore mostly written during?', options: ['Taylor’s 1989 tour', 'The pandemic', 'Her Red tour', 'Her debut era'], answer: 'The pandemic' }
-      ],
-      'Midnights': [
-        { question: 'Which song opens the Midnights album?', options: ['Lavender Haze', 'Maroon', 'Karma', 'Anti-Hero'], answer: 'Lavender Haze' },
-        { question: 'Which song includes the lyric “It’s me, hi, I’m the problem, it’s me”?', options: ['Bejeweled', 'Anti-Hero', 'Snow on the Beach', 'Mastermind'], answer: 'Anti-Hero' },
-        { question: 'What deluxe edition of Midnights was later released?', options: ['3AM Edition', 'Moonlight Edition', 'Taylor’s Version', 'Deluxe Lover Edition'], answer: '3AM Edition' }
-      ]
-    };
+let completedEras = {};
+let currentEra = null;
+let currentQuestionIndex = 0;
+const container = document.getElementById('game-container');
+const giftBtn = document.getElementById('gift-btn');
+const confettiCanvas = document.getElementById('confetti');
+const ctx = confettiCanvas.getContext('2d');
+confettiCanvas.width = window.innerWidth;
+confettiCanvas.height = window.innerHeight;
 
-    let currentEra = null;
-    let currentQuestions = [];
-    let currentQuestionIndex = 0;
+function showEraSelection() {
+  document.body.style.backgroundColor = '#fef6f9';
+  container.innerHTML = '<h2>Select an Era</h2>';
+  for (let era in eras) {
+    const btn = document.createElement('button');
+    btn.textContent = era;
+    btn.className = 'era-btn';
+    if (completedEras[era]) btn.classList.add('completed');
+    btn.onclick = () => startEra(era);
+    container.appendChild(btn);
+  }
+  checkCompletion();
+}
 
-    const eraSelection = document.getElementById('era-selection');
-    const questionContainer = document.getElementById('question-container');
-    const feedback = document.getElementById('feedback');
-    const nextBtn = document.getElementById('next-btn');
-    const retryBtn = document.getElementById('retry-btn');
+function startEra(era) {
+  currentEra = era;
+  currentQuestionIndex = 0;
+  document.body.style.backgroundColor = eras[era].color;
+  showQuestion();
+}
 
-    function showEraSelection() {
-      questionContainer.innerHTML = '';
-      feedback.textContent = '';
-      nextBtn.classList.add('hidden');
-      retryBtn.classList.add('hidden');
-      eraSelection.innerHTML = '<h2>Select an Era</h2>';
-      for (const era in eras) {
-        const btn = document.createElement('button');
-        btn.textContent = era;
-        btn.classList.add('era-btn');
-        btn.addEventListener('click', () => startEra(era));
-        eraSelection.appendChild(btn);
-      }
+function showQuestion() {
+  const qData = eras[currentEra].questions[currentQuestionIndex];
+  container.innerHTML = `<div class='question'>${qData.q}</div>`;
+  qData.a.forEach((choice, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = choice;
+    btn.className = 'choice';
+    btn.onclick = () => checkAnswer(i);
+    container.appendChild(btn);
+  });
+  const feedback = document.createElement('div');
+  feedback.id = 'feedback';
+  container.appendChild(feedback);
+  const retry = document.createElement('button');
+  retry.id = 'retry-btn';
+  retry.textContent = 'Try Again';
+  retry.onclick = showQuestion;
+  container.appendChild(retry);
+}
+
+function checkAnswer(selected) {
+  const qData = eras[currentEra].questions[currentQuestionIndex];
+  const feedback = document.getElementById('feedback');
+  const retry = document.getElementById('retry-btn');
+  if (selected === qData.c) {
+    feedback.textContent = '✅ Correct!';
+    retry.style.display = 'none';
+    currentQuestionIndex++;
+    if (currentQuestionIndex < eras[currentEra].questions.length) {
+      setTimeout(showQuestion, 800);
+    } else {
+      completedEras[currentEra] = true;
+      setTimeout(showEraSelection, 1000);
     }
+  } else {
+    feedback.textContent = '❌ Wrong!';
+    retry.style.display = 'inline-block';
+  }
+}
 
-    function startEra(era) {
-      currentEra = era;
-      currentQuestions = eras[era];
-      currentQuestionIndex = 0;
-      eraSelection.innerHTML = '';
-      showQuestion();
-    }
+function checkCompletion() {
+  if (Object.keys(eras).every(e => completedEras[e])) {
+    giftBtn.style.display = 'block';
+  }
+}
 
-    function showQuestion() {
-      feedback.textContent = '';
-      retryBtn.classList.add('hidden');
-      nextBtn.classList.add('hidden');
-      const q = currentQuestions[currentQuestionIndex];
-      questionContainer.innerHTML = `<h2>${currentEra}: ${q.question}</h2>`;
-      q.options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.textContent = option;
-        btn.classList.add('option-btn');
-        btn.addEventListener('click', () => selectAnswer(option));
-        questionContainer.appendChild(btn);
-      });
-    }
+giftBtn.onclick = () => {
+  container.innerHTML = `<h2>🎉 Happy Birthday! 🎉</h2><p id='final-message'>You're a true Swiftie! 💕</p>`;
+  startConfetti();
+};
 
-    function selectAnswer(selected) {
-      const correct = currentQuestions[currentQuestionIndex].answer;
-      if (selected === correct) {
-        feedback.textContent = '✅ Correct!';
-        feedback.style.color = 'lightgreen';
-        nextBtn.classList.remove('hidden');
-        retryBtn.classList.add('hidden');
+// Confetti + hearts animation (few seconds)
+function startConfetti() {
+  const pieces = [];
+  for (let i = 0; i < 150; i++) {
+    pieces.push({
+      x: Math.random() * confettiCanvas.width,
+      y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 50,
+      color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+      tilt: Math.random() * 10 - 10,
+      emoji: Math.random() < 0.3 ? '💖' : null
+    });
+  }
+  let duration = 5000;
+  const start = Date.now();
+  function draw() {
+    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    const elapsed = Date.now() - start;
+    if (elapsed > duration) return;
+    pieces.forEach(p => {
+      p.y += 3;
+      p.x += Math.sin(p.d);
+      if (p.y > confettiCanvas.height) p.y = 0;
+      if (p.emoji) {
+        ctx.font = `${p.r * 2}px serif`;
+        ctx.fillText(p.emoji, p.x, p.y);
       } else {
-        feedback.textContent = '❌ Wrong! Try again!';
-        feedback.style.color = 'red';
-        retryBtn.classList.remove('hidden');
-        nextBtn.classList.add('hidden');
-      }
-    }
-
-    nextBtn.addEventListener('click', () => {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < currentQuestions.length) {
-        showQuestion();
-      } else {
-        const erasLeft = Object.keys(eras);
-        const currentEraIndex = erasLeft.indexOf(currentEra);
-        if (currentEraIndex < erasLeft.length - 1) {
-          startEra(erasLeft[currentEraIndex + 1]);
-        } else {
-          showFinalMessage();
-        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
       }
     });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
 
-    retryBtn.addEventListener('click', showQuestion);
-
-    function showFinalMessage() {
-      questionContainer.innerHTML = '<h2>🎉 Happy Birthday! 🎂</h2><p>You completed all the eras!</p>';
-      feedback.textContent = '';
-      nextBtn.classList.add('hidden');
-      retryBtn.classList.add('hidden');
-      launchConfetti();
-    }
-
-    function launchConfetti() {
-      const emojis = ['🎉','💖','💘','💝','🎂','💞'];
-      for (let i = 0; i < 150; i++) {
-        const confetti = document.createElement('div');
-        confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        confetti.style.position = 'fixed';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.top = '-10px';
-        confetti.style.fontSize = Math.random() * 20 + 15 + 'px';
-        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
-        document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 5000);
-      }
-    }
-
-    const style = document.createElement('style');
-    style.innerHTML = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }`;
-    document.head.appendChild(style);
-
-    showEraSelection();
-  </script>
+showEraSelection();
+</script>
 </body>
 </html>
